@@ -11,9 +11,13 @@ const localizationSlice = createSlice({
     setCurrentLanguage: (state, action) => {
       state.currentLanguage = action.payload;
     },
+    setLocalization: (state, action) => {
+      state.localization = action.payload;
+    },
   },
 });
 
-export const { setCurrentLanguage } = localizationSlice.actions;
+export const { setCurrentLanguage, setLocalization } =
+  localizationSlice.actions;
 
 export default localizationSlice.reducer;

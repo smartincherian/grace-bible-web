@@ -1,12 +1,13 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { COLLECTION_NAMES } from "../constants";
 import { DB } from "../../config";
 
 const collectionRef = collection(DB, COLLECTION_NAMES.VERSES);
 
-export const fetchVerses = async () => {
+export const fetchVerses = async (id) => {
   try {
-    const querySnapshot = await getDocs(collectionRef);
+    const q = query(collectionRef, where("sectionIds", "array-contains", id));
+    const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
       const response = querySnapshot.docs.map((doc) => ({
         ...doc.data(),

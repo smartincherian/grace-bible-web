@@ -1,6 +1,13 @@
 {
   "choose-topic": {
     "english": "Choose a topic to continue :",
-    "malayalam": "തുടരാൻ ഒരു വിഷയം തിരഞ്ഞെടുക്കുക :"
-  }
+    "malayalam": "തുടരാൻ ഒരു വിഷയം തിരഞ്ഞെടുക്കുക "
+  },
+  "faith": {
+    "english": "Faith",
+    "malayalam": "വിശ്വാസം"
+  },
+  "luke": { "english": "Luke", "malayalam": "ലൂക്ക" },
+  "isaiah": { "english": "Isaiah", "malayalam": "ഏശയ്യാ" },
+  "sirach": { "english": "Sirach", "malayalam": "പ്രഭാഷകന്‍" }
 }

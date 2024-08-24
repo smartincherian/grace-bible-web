@@ -1,80 +1,32 @@
-import AddIcon from "@mui/icons-material/Add";
-import ChurchIcon from "@mui/icons-material/Church";
-import FilterVintageIcon from "@mui/icons-material/FilterVintage";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import useLocalization from "../../hooks/useLocalization";
+import { useMediaQuery, useTheme } from "@mui/material";
+import React, { useEffect } from "react";
+import ListItemsWrapper from "../../components/ListItemsWrapper";
+import { useGetSectionsMutation } from "../../store/verses/service";
 
 const Home = ({ onNavigate }) => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { translate } = useLocalization();
+  const [getSections, { isLoading }] = useGetSectionsMutation();
 
-  const menuItems = [
-    { text: "Add Prayer Count", icon: <AddIcon />, path: "/intention-list" },
-    {
-      text: "Mother Mary Intentions",
-      icon: <FilterVintageIcon />,
-      path: "/intention-mother",
-    },
-    {
-      text: "New Prayer Intention",
-      icon: <ChurchIcon />,
-      path: "/intention-add",
-    },
-  ];
+  useEffect(() => {
+    getSectionsHandler();
+  }, []);
+
+  const getSectionsHandler = async () => {
+    try {
+      await getSections();
+    } catch (error) {
+      console.error("Error fetching sections:", error);
+    }
+  };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
-          <img
-            src="/images/logo.webp"
-            alt="My Beautiful App Logo"
-            style={{
-              maxWidth: "100%",
-              height: "auto",
-              maxHeight: "150px", // Adjust this value as needed
-            }}
-          />
-        </Box>
-        <Typography variant="h6" align="center">
-          {translate("choose-topic")}
-        </Typography>
-        <Grid container spacing={2} justifyContent="center">
-          {menuItems.map((item) => (
-            <Grid item xs={12} sm={4} key={item.text}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                startIcon={item.icon}
-                onClick={() => navigate(item.path)}
-                fullWidth
-                sx={{
-                  py: 2,
-                  textTransform: "none",
-                  borderRadius: 2,
-                }}
-              >
-                {item.text}
-              </Button>
-            </Grid>
-          ))}
-        </Grid>
-      </Paper>
-    </Container>
+    <ListItemsWrapper
+      heading={"choose-topic"}
+      image={"/images/logo.webp"}
+      isSection={true}
+      loading={isLoading}
+    />
   );
 };
 
