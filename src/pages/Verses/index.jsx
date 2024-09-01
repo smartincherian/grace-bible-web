@@ -1,21 +1,9 @@
 // src/Counter.js
 
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Container,
-  Grid,
-  Skeleton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { COMMON_PRAYER_TYPES } from "../PrayerForm/constants";
+import ListItemsWrapper from "../../section/ListItemsWrapper";
 import { useGetVersesMutation } from "../../store/verses/service";
-import ListItemsWrapper from "../../components/ListItemsWrapper";
 
 const Verses = () => {
   const { id } = useParams();

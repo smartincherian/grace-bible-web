@@ -14,13 +14,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/sections/:id" element={<Verses />} />
-            {/* <Route path="/intention-add" element={<PrayerForm />} />
-          <Route path="/intention-list" element={<IntentionsList />} />
-          
-          <Route
-            path="/intention-mother"
-            element={<PrayerForm path={"mother"} />}
-          /> */}
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>

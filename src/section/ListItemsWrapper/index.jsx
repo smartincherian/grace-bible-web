@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import ListItems from "../../components/ListItems";
+import ListItems from "../ListItems";
 import useLocalization from "../../hooks/useLocalization";
 import { RootState } from "../../store";
 

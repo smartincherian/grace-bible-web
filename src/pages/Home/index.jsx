@@ -1,6 +1,6 @@
 import { useMediaQuery, useTheme } from "@mui/material";
 import React, { useEffect } from "react";
-import ListItemsWrapper from "../../components/ListItemsWrapper";
+import ListItemsWrapper from "../../section/ListItemsWrapper";
 import { useGetSectionsMutation } from "../../store/verses/service";
 
 const Home = ({ onNavigate }) => {
