@@ -88,6 +88,8 @@ const VerseCard = ({ verse = {}, language }) => {
             justifyContent: "center",
             height: "100%",
             position: "relative",
+            padding: "32px",
+            boxSizing: "border-box",
           }}
         >
           <IconButton
@@ -102,7 +104,7 @@ const VerseCard = ({ verse = {}, language }) => {
           <Box
             sx={{
               textAlign: "center",
-              p: 4,
+              padding: "24px",
               border: "2px solid #4A90E2", // Inner border for the content box
               borderRadius: "12px",
               backgroundColor: "primary.main",
@@ -110,7 +112,7 @@ const VerseCard = ({ verse = {}, language }) => {
               color: "whitesmoke",
             }}
           >
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h6" gutterBottom>
               {verse[language]}
             </Typography>
             <Typography variant="body1">
