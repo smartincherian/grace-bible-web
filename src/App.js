@@ -5,6 +5,7 @@ import { SnackbarProvider } from "./components/Snackbar";
 import Verses from "./pages/Verses";
 import { theme } from "./theme";
 import { ThemeProvider } from "@mui/material";
+import AdminVersesForm from "./pages/Admin";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/sections/:id" element={<Verses />} />
+            <Route path="/admin" element={<AdminVersesForm />} />
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>
