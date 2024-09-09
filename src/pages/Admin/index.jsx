@@ -1,13 +1,20 @@
-import React from "react";
-import { useForm, Controller } from "react-hook-form";
 import {
-  Container,
-  TextField,
-  Button,
-  Grid,
   Autocomplete,
+  Button,
+  Container,
+  Grid,
+  TextField,
 } from "@mui/material";
+import React, { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { RootState } from "../../store";
+import {
+  useAddSectionMutation,
+  useAddVerseMutation,
+  useGetSectionsMutation,
+} from "../../store/verses/service";
 import { BIBLE_BOOKS } from "../../utils/constants";
+import { AdminSections } from "./sections";
 
 const AdminVersesForm = () => {
   const { handleSubmit, control, reset } = useForm({
@@ -21,10 +28,45 @@ const AdminVersesForm = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // Do something with the form data
-    reset(); // Reset form after submission
+  const [getSections, { isLoading }] = useGetSectionsMutation();
+  const [addVerse, { isLoading: isAddingVerse }] = useAddVerseMutation();
+  const [addSection, { isLoading: isAddingSection }] = useAddSectionMutation();
+  const { sections = [] } = RootState()?.versesData;
+
+  const LANGUAGE = "malayalam";
+
+  useEffect(() => {
+    getSectionsHandler();
+  }, []);
+
+  const getSectionsHandler = async () => {
+    try {
+      await getSections();
+    } catch (error) {
+      console.error("Error fetching sections:", error);
+    }
+  };
+
+  const onSubmit = async (data) => {
+    try {
+      await addVerse(data);
+    } catch (error) {
+      console.error("Error addVerse", error);
+    }
+
+    reset();
+  };
+
+  const handleSectionAdd = async (data) => {
+    try {
+      const sectionTitle = data?.english || "";
+      const updatedData = { ...data, value: sectionTitle.toLowerCase() };
+      await addSection(updatedData);
+    } catch (error) {
+      console.error("Error addSection", error);
+    }
+
+    reset();
   };
 
   return (
@@ -137,21 +179,11 @@ const AdminVersesForm = () => {
           </Grid>
 
           {/* Section */}
-          <Grid item xs={12}>
-            <Controller
-              name="section"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label="Section"
-                  variant="outlined"
-                  required
-                />
-              )}
-            />
-          </Grid>
+          <AdminSections
+            control={control}
+            sections={sections}
+            addNewSection={handleSectionAdd}
+          />
 
           {/* Submit Button */}
           <Grid item xs={12}>

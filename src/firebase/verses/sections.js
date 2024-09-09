@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { COLLECTION_NAMES } from "../constants";
 import { DB } from "../../config";
 
@@ -17,6 +17,16 @@ export const fetchSections = async () => {
     return [];
   } catch (error) {
     console.error("Error [fetchSections]:", error);
+    throw error;
+  }
+};
+
+export const sectionAdd = async (data) => {
+  try {
+    const docRef = await addDoc(collectionRef, data);
+    return { ...data, id: docRef.id };
+  } catch (error) {
+    console.error("Error [verseAdd]:", error);
     throw error;
   }
 };
