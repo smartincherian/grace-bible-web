@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { COLLECTION_NAMES } from "../constants";
 import { DB } from "../../config";
 
@@ -18,6 +18,16 @@ export const fetchVerses = async (id) => {
     return [];
   } catch (error) {
     console.error("Error [fetchVerses]:", error);
+    throw error;
+  }
+};
+
+export const verseAdd = async (data) => {
+  try {
+    const docRef = await addDoc(collectionRef, data);
+    return { success: true, id: docRef.id };
+  } catch (error) {
+    console.error("Error [verseAdd]:", error);
     throw error;
   }
 };

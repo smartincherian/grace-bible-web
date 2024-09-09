@@ -1,6 +1,6 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setSections, setVerses } from "./slice";
-import { fetchVerses } from "../../firebase/verses/verses";
+import { fetchVerses, verseAdd } from "../../firebase/verses/verses";
 import { fetchSections } from "../../firebase/verses/sections";
 
 export const versesApi = createApi({
@@ -36,7 +36,24 @@ export const versesApi = createApi({
         }
       },
     }),
+    addVerse: builder.mutation({
+      async queryFn(data, { dispatch, getState }) {
+        try {
+          await verseAdd(data);
+          return {
+            data: true,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetSectionsMutation, useGetVersesMutation } = versesApi;
+export const {
+  useGetSectionsMutation,
+  useGetVersesMutation,
+  useAddVerseMutation,
+} = versesApi;
