@@ -121,6 +121,10 @@ const VerseCard = ({ verse = {}, language }) => {
             position: "relative",
             padding: "32px",
             boxSizing: "border-box",
+            backgroundImage: `url(/images/hope.webp)`, // Background image
+            backgroundSize: "cover", // Ensures the image covers the whole area
+            backgroundPosition: "center", // Centers the image
+            backgroundRepeat: "no-repeat", //
           }}
         >
           <IconButton
@@ -136,14 +140,18 @@ const VerseCard = ({ verse = {}, language }) => {
             sx={{
               textAlign: "center",
               padding: "24px",
-              border: "2px solid #4A90E2", // Inner border for the content box
-              borderRadius: "12px",
-              backgroundColor: "primary.main",
-              boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
-              color: "whitesmoke",
+              color: "primary.main",
             }}
           >
-            <Typography variant="h6" gutterBottom>
+            <Typography
+              sx={{
+                fontFamily: '"Noto Serif", "Roboto", serif', // Primary font for h3
+                fontWeight: "bold", // Make the title bold
+                fontSize: language === "Malayalam" ? "2rem" : "2.5rem", // Adjust font size for different languages
+              }}
+              variant="h3"
+              gutterBottom
+            >
               {verse[language]}
             </Typography>
             <Typography variant="body1">
