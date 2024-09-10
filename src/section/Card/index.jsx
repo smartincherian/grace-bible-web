@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Box,
   Card,
@@ -8,13 +8,16 @@ import {
   Dialog,
   DialogContent,
   IconButton,
+  Button,
 } from "@mui/material";
 import useLocalization from "../../hooks/useLocalization";
 import CloseIcon from "@mui/icons-material/Close";
+import { toPng } from "html-to-image";
 
 const VerseCard = ({ verse = {}, language }) => {
   const { translate } = useLocalization();
   const [open, setOpen] = useState(false);
+  const contentRef = useRef(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,6 +25,33 @@ const VerseCard = ({ verse = {}, language }) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleDownload = () => {
+    if (contentRef.current) {
+      const deviceWidth = window.innerWidth;
+      const deviceHeight = window.innerHeight;
+
+      toPng(contentRef.current, {
+        quality: 1,
+        backgroundColor: "#D1E9F6",
+        width: deviceWidth, // Set width to device width
+        height: deviceHeight, // Set height to device height
+        quality: 1, // Set high quality
+        pixelRatio: 2,
+      })
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.href = dataUrl;
+          link.download = "verse-image.png";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        })
+        .catch((err) => {
+          console.error("Error generating image:", err);
+        });
+    }
   };
 
   return (
@@ -81,6 +111,7 @@ const VerseCard = ({ verse = {}, language }) => {
         }}
       >
         <DialogContent
+          ref={contentRef}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -120,6 +151,13 @@ const VerseCard = ({ verse = {}, language }) => {
             </Typography>
           </Box>
         </DialogContent>
+        <Button
+          variant="contained"
+          sx={{ marginTop: "16px" }}
+          onClick={handleDownload}
+        >
+          Download Image
+        </Button>
       </Dialog>
     </>
   );
