@@ -18,7 +18,7 @@ const VerseCard = ({ verse = {}, language }) => {
   const { translate } = useLocalization();
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
-
+  const COUNT_OF_IMAGES = 3;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -52,6 +52,11 @@ const VerseCard = ({ verse = {}, language }) => {
           console.error("Error generating image:", err);
         });
     }
+  };
+
+  const getRandomImage = () => {
+    const imageNumber = Math.floor(Math.random() * COUNT_OF_IMAGES) + 1;
+    return `/images/${imageNumber}.webp`;
   };
 
   return (
@@ -112,7 +117,7 @@ const VerseCard = ({ verse = {}, language }) => {
             position: "relative",
             padding: "32px",
             boxSizing: "border-box",
-            backgroundImage: `url(/images/hope.webp)`, // Background image
+            backgroundImage: `url(${getRandomImage()})`,
             backgroundSize: "cover", // Ensures the image covers the whole area
             backgroundPosition: "center", // Centers the image
             backgroundRepeat: "no-repeat", //
