@@ -99,17 +99,7 @@ const VerseCard = ({ verse = {}, language }) => {
         </Card>
       </Grid>
       {/* Fullscreen Dialog */}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        fullScreen
-        PaperProps={{
-          style: {
-            backgroundColor: "#D1E9F6",
-            padding: "16px", // Padding around the content
-          },
-        }}
-      >
+      <Dialog open={open} onClose={handleClose} fullScreen>
         <DialogContent
           ref={contentRef}
           sx={{
@@ -118,6 +108,7 @@ const VerseCard = ({ verse = {}, language }) => {
             alignItems: "center",
             justifyContent: "center",
             height: "100%",
+            width: "100%",
             position: "relative",
             padding: "32px",
             boxSizing: "border-box",
@@ -125,17 +116,9 @@ const VerseCard = ({ verse = {}, language }) => {
             backgroundSize: "cover", // Ensures the image covers the whole area
             backgroundPosition: "center", // Centers the image
             backgroundRepeat: "no-repeat", //
+            border: "8px solid #FEFAE0",
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            onClick={handleClose}
-            aria-label="close"
-            sx={{ position: "absolute", top: 8, right: 8, color: "lightgrey" }}
-          >
-            <CloseIcon />
-          </IconButton>
           <Box
             sx={{
               textAlign: "center",
@@ -147,9 +130,8 @@ const VerseCard = ({ verse = {}, language }) => {
               sx={{
                 fontFamily: '"Noto Serif", "Roboto", serif', // Primary font for h3
                 fontWeight: "bold", // Make the title bold
-                fontSize: language === "Malayalam" ? "2rem" : "2.5rem", // Adjust font size for different languages
               }}
-              variant="h3"
+              variant="h5"
               gutterBottom
             >
               {verse[language]}
@@ -159,13 +141,29 @@ const VerseCard = ({ verse = {}, language }) => {
             </Typography>
           </Box>
         </DialogContent>
-        <Button
-          variant="contained"
-          sx={{ marginTop: "16px" }}
-          onClick={handleDownload}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "16px",
+            mb: "1rem",
+          }}
         >
-          Download Image
-        </Button>
+          <Button
+            variant="contained"
+            sx={{ marginTop: "16px" }}
+            onClick={handleDownload}
+          >
+            Download
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ marginTop: "16px" }}
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+        </Box>
       </Dialog>
     </>
   );
