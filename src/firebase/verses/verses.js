@@ -24,8 +24,23 @@ export const fetchVerses = async (id) => {
 
 export const verseAdd = async (data) => {
   try {
-    const docRef = await addDoc(collectionRef, data);
-    return { success: true, id: docRef.id };
+    const q = query(
+      collectionRef,
+      where("book", "==", data.book),
+      where("chapter", "==", data.chapter),
+      where("verse", "==", data.verse)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      return {
+        success: false,
+        message: "Same verse already exists",
+      };
+    }
+    await addDoc(collectionRef, data);
+    return { success: true, message: "Verse added successfully" };
   } catch (error) {
     console.error("Error [verseAdd]:", error);
     throw error;

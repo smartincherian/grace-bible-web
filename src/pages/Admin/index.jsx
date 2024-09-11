@@ -5,7 +5,7 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { RootState } from "../../store";
 import {
@@ -15,6 +15,12 @@ import {
 } from "../../store/verses/service";
 import { BIBLE_BOOKS } from "../../utils/constants";
 import { AdminSections } from "./sections";
+import {
+  SNACK_BAR_POSITIONS,
+  SNACK_BAR_SEVERITY_TYPES,
+  SnackbarContext,
+} from "../../components/Snackbar";
+import useErrorToast from "../../hooks/useErrorToast";
 
 const AdminVersesForm = () => {
   const { handleSubmit, control, reset } = useForm({
@@ -27,7 +33,8 @@ const AdminVersesForm = () => {
       verse: "",
     },
   });
-
+  const { showSnackbar } = useContext(SnackbarContext);
+  const showErrorMessage = useErrorToast();
   const [getSections, { isLoading }] = useGetSectionsMutation();
   const [addVerse, { isLoading: isAddingVerse }] = useAddVerseMutation();
   const [addSection, { isLoading: isAddingSection }] = useAddSectionMutation();
@@ -49,12 +56,17 @@ const AdminVersesForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      await addVerse(data);
+      const response = await addVerse(data);
+      if (response?.data?.success) {
+        showSnackbar(response?.data?.message, SNACK_BAR_SEVERITY_TYPES.SUCCESS);
+        reset();
+      } else {
+        showErrorMessage({}, response?.data?.message);
+      }
     } catch (error) {
+      showErrorMessage(error);
       console.error("Error addVerse", error);
     }
-
-    reset();
   };
 
   const handleSectionAdd = async (data) => {

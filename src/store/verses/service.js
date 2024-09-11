@@ -39,9 +39,9 @@ export const versesApi = createApi({
     addVerse: builder.mutation({
       async queryFn(data, { dispatch, getState }) {
         try {
-          await verseAdd(data);
+          const response = await verseAdd(data);
           return {
-            data: true,
+            data: response,
           };
         } catch (e) {
           console.error(e);
