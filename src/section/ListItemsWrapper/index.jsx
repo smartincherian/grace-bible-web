@@ -24,7 +24,7 @@ const ListItemsWrapper = ({ heading, image, isSection, isVerses, loading }) => {
   const { sections = [], verses = [] } = RootState()?.versesData;
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: 2 }}>
       <Card variant="outlined" sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
         <CardContent>
           {image ? (

@@ -1,13 +1,14 @@
 import { Button, Grid } from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useLocalization from "../../hooks/useLocalization";
 import VerseCard from "../Card";
 
 const ListItems = ({ items = [], isVerses, isSection }) => {
   const navigate = useNavigate();
-
-  const LANGUAGE = "malayalam";
+  const { currentLanguage: LANGUAGE, translations } = useSelector(
+    (state) => state.localizationData
+  );
 
   const itemClickHandler = (id = "") => {
     if (isSection) navigate(`sections/${id}`);

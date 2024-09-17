@@ -1,7 +1,8 @@
-import { useMediaQuery, useTheme } from "@mui/material";
+import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import React, { useEffect } from "react";
 import ListItemsWrapper from "../../section/ListItemsWrapper";
 import { useGetSectionsMutation } from "../../store/verses/service";
+import LanguageSelector from "../../section/LanguageSelector";
 
 const Home = ({ onNavigate }) => {
   const theme = useTheme();
@@ -21,12 +22,17 @@ const Home = ({ onNavigate }) => {
   };
 
   return (
-    <ListItemsWrapper
-      heading={"choose-topic"}
-      image={"/images/logo.webp"}
-      isSection={true}
-      loading={isLoading}
-    />
+    <>
+      <Grid container justifyContent={"flex-end"}>
+        <LanguageSelector />
+      </Grid>
+      <ListItemsWrapper
+        heading={"choose-topic"}
+        image={"/images/logo.webp"}
+        isSection={true}
+        loading={isLoading}
+      />
+    </>
   );
 };
 
