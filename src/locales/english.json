@@ -1,8 +1,13 @@
 {
-  "choose-topic": {
-    "english": "Choose a topic to continue :",
-    "malayalam": "തുടരാൻ ഒരു വിഷയം തിരഞ്ഞെടുക്കുക "
+  "todays-topic": {
+    "english": "Today's Topic:",
+    "malayalam": "ഇന്നത്തെ വിഷയം:"
   },
+  "choose-topic": {
+    "english": "Or You can select any other topic:",
+    "malayalam": "അഥവാ നിങ്ങൾക്ക് മറ്റൊരു വിഷയം തിരഞ്ഞെടുക്കാം:"
+  },
+
   "faith": {
     "english": "Faith",
     "malayalam": "വിശ്വാസം"

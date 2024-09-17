@@ -1,27 +1,40 @@
 import {
   Box,
-  Container,
-  Paper,
-  Typography,
-  useMediaQuery,
-  useTheme,
-  Skeleton,
   Card,
   CardContent,
+  Container,
+  Skeleton,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import ListItems from "../ListItems";
-import useLocalization from "../../hooks/useLocalization";
+import React, { useEffect, useState } from "react";
 import { RootState } from "../../store";
+import ListItems from "../ListItems";
+import DailySection from "./DailySection";
+import { getTodaysSection, setTodaysSection } from "./utils";
 
 const ListItemsWrapper = ({ heading, image, isSection, isVerses, loading }) => {
   const theme = useTheme();
-  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const { translate } = useLocalization();
 
   const { sections = [], verses = [] } = RootState()?.versesData;
+
+  const [todaysSection, setTodaysSectionState] = useState(null);
+
+  useEffect(() => {
+    let storedSection = getTodaysSection();
+    if (!storedSection && sections.length > 0) {
+      const randomSection =
+        sections[Math.floor(Math.random() * sections.length)];
+      setTodaysSection(randomSection);
+      storedSection = randomSection;
+    }
+    setTodaysSectionState(storedSection);
+  }, [sections]);
+
+  const remainingSections = sections.filter(
+    (section) => section.id !== todaysSection?.id
+  );
 
   return (
     <Container maxWidth="md" sx={{ py: 2 }}>
@@ -41,10 +54,9 @@ const ListItemsWrapper = ({ heading, image, isSection, isVerses, loading }) => {
             </Box>
           ) : null}
 
-          <Typography variant="h6" align="center">
-            {translate(heading)}
-          </Typography>
-          {loading ? (
+          {isSection && <DailySection item={todaysSection} />}
+
+          {loading || !todaysSection ? (
             <Skeleton
               variant="text"
               width="30%"
@@ -53,7 +65,7 @@ const ListItemsWrapper = ({ heading, image, isSection, isVerses, loading }) => {
             />
           ) : (
             <ListItems
-              items={isSection ? sections : verses}
+              items={isSection ? remainingSections : verses}
               isVerses={isVerses}
               isSection={isSection}
             />

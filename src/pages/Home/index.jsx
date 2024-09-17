@@ -26,8 +26,8 @@ const Home = ({ onNavigate }) => {
       <Grid container justifyContent={"flex-end"}>
         <LanguageSelector />
       </Grid>
+
       <ListItemsWrapper
-        heading={"choose-topic"}
         image={"/images/logo.webp"}
         isSection={true}
         loading={isLoading}
