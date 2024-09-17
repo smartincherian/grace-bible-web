@@ -7,18 +7,16 @@ import {
   Grid,
   Dialog,
   DialogContent,
-  IconButton,
   Button,
 } from "@mui/material";
 import useLocalization from "../../hooks/useLocalization";
-import CloseIcon from "@mui/icons-material/Close";
 import { toPng } from "html-to-image";
 
 const VerseCard = ({ verse = {}, language }) => {
   const { translate } = useLocalization();
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
-  const COUNT_OF_IMAGES = 3;
+  const COUNT_OF_IMAGES = 8;
   const handleClickOpen = () => {
     setOpen(true);
   };

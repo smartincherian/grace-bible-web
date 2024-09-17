@@ -1,6 +1,6 @@
 export const BIBLE_BOOKS = [
   { label: "Genesis (ഉല്പത്തി)", value: "genesis" },
-  { label: "Exodus (പ്രവാസം)", value: "exodus" },
+  { label: "Exodus (പുറപ്പാട്)", value: "exodus" },
   { label: "Leviticus (ലേവ്യപുസ്തകം)", value: "leviticus" },
   { label: "Numbers (സംഖ്യകൾ)", value: "numbers" },
   { label: "Deuteronomy (ആവർത്തനം)", value: "deuteronomy" },
@@ -49,7 +49,7 @@ export const BIBLE_BOOKS = [
   { label: "Mark (മർക്കോസ്)", value: "mark" },
   { label: "Luke (ലൂക്കാ)", value: "luke" },
   { label: "John (യോഹന്നാൻ)", value: "john" },
-  { label: "Acts (അപ്പസ്തോലപ്രവൃത്തികൾ)", value: "acts" },
+  { label: "Acts (അപ്പ. പ്രവര്‍ത്തനങ്ങള്‍)", value: "acts" },
   { label: "Romans (റോമാക്കാർ)", value: "romans" },
   { label: "1 Corinthians (1 കൊരിന്ത്യർ)", value: "1_corinthians" },
   { label: "2 Corinthians (2 കൊരിന്ത്യർ)", value: "2_corinthians" },
