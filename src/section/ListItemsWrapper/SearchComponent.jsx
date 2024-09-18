@@ -67,7 +67,7 @@ const SearchComponent = () => {
         <Autocomplete
           autoSelect
           freeSolo
-          options={tags}
+          options={searchTerm ? tags : []}
           value={
             searchOptions.find((option) => option.label === searchTerm) || null
           }
