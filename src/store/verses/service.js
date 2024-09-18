@@ -1,7 +1,13 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
-import { setSections, setVerses } from "./slice";
+import { setSections, setTags, setVerses } from "./slice";
 import { fetchVerses, verseAdd } from "../../firebase/verses/verses";
-import { fetchSections, sectionAdd } from "../../firebase/verses/sections";
+import {
+  fetchSections,
+  fetchSectionsTags,
+  sectionAdd,
+  sectionsSearch,
+  sectionUpdate,
+} from "../../firebase/verses/sections";
 
 export const versesApi = createApi({
   reducerPath: "verses",
@@ -65,6 +71,53 @@ export const versesApi = createApi({
         }
       },
     }),
+    updateSection: builder.mutation({
+      async queryFn(data, { dispatch, getState }) {
+        try {
+          const { id, tags } = data || {};
+          await sectionUpdate({ id, tags });
+          return {
+            data: true,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
+    searchSections: builder.mutation({
+      async queryFn(search, { dispatch, getState }) {
+        try {
+          let result = [];
+          if (search) {
+            result = await sectionsSearch(search);
+          } else {
+            result = await fetchSections();
+          }
+          dispatch(setSections(result));
+          return {
+            data: true,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
+    getTags: builder.mutation({
+      async queryFn(data, { dispatch, getState }) {
+        try {
+          const result = await fetchSectionsTags();
+          dispatch(setTags(result));
+          return {
+            data: true,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
   }),
 });
 
@@ -73,4 +126,7 @@ export const {
   useGetVersesMutation,
   useAddVerseMutation,
   useAddSectionMutation,
+  useUpdateSectionMutation,
+  useSearchSectionsMutation,
+  useGetTagsMutation,
 } = versesApi;

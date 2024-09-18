@@ -4,8 +4,12 @@
     "malayalam": "ഇന്നത്തെ വിഷയം:"
   },
   "choose-topic": {
-    "english": "Or You can select any other topic:",
-    "malayalam": "അഥവാ നിങ്ങൾക്ക് മറ്റൊരു വിഷയം തിരഞ്ഞെടുക്കാം:"
+    "english": "Or You can select any topic:",
+    "malayalam": "അഥവാ നിങ്ങൾക്ക് ഏതെങ്കിലും വിഷയം തിരഞ്ഞെടുക്കാം:"
+  },
+  "search-topic": {
+    "english": "Search any topic:",
+    "malayalam": "ഏതെങ്കിലും വിഷയം തിരയുക:"
   },
 
   "faith": {

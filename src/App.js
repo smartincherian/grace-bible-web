@@ -6,6 +6,7 @@ import Verses from "./pages/Verses";
 import { theme } from "./theme";
 import { ThemeProvider } from "@mui/material";
 import AdminVersesForm from "./pages/Admin";
+import AdminSectionsForm from "./pages/Admin/sections";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/sections/:id" element={<Verses />} />
             <Route path="/admin" element={<AdminVersesForm />} />
+            <Route path="/admin/section" element={<AdminSectionsForm />} />
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>

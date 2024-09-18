@@ -5,6 +5,7 @@ const versesSlice = createSlice({
   initialState: {
     sections: [],
     verses: [],
+    tags: [],
   },
   reducers: {
     setSections: (state, action) => {
@@ -13,9 +14,12 @@ const versesSlice = createSlice({
     setVerses: (state, action) => {
       state.verses = action.payload;
     },
+    setTags: (state, action) => {
+      state.tags = action.payload;
+    },
   },
 });
 
-export const { setSections, setVerses } = versesSlice.actions;
+export const { setSections, setVerses, setTags } = versesSlice.actions;
 
 export default versesSlice.reducer;

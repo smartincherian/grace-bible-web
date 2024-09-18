@@ -12,12 +12,16 @@ import { RootState } from "../../store";
 import ListItems from "../ListItems";
 import DailySection from "./DailySection";
 import { getTodaysSection, setTodaysSection } from "./utils";
+import SearchComponent from "./SearchComponent";
+import { useSelector } from "react-redux";
 
 const ListItemsWrapper = ({ heading, image, isSection, isVerses, loading }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { sections = [], verses = [] } = RootState()?.versesData;
+  const { verses = [] } = RootState()?.versesData;
+
+  const sections = useSelector((state) => state.versesData.sections);
 
   const [todaysSection, setTodaysSectionState] = useState(null);
 
@@ -55,6 +59,7 @@ const ListItemsWrapper = ({ heading, image, isSection, isVerses, loading }) => {
           ) : null}
 
           {isSection && <DailySection item={todaysSection} />}
+          {isSection && <SearchComponent />}
 
           {loading || !todaysSection ? (
             <Skeleton

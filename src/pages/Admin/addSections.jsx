@@ -11,6 +11,8 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Autocomplete,
+  Chip,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
 
@@ -19,6 +21,7 @@ export const AdminSections = ({ control, sections, addNewSection }) => {
   const [newSection, setNewSection] = useState({
     english: "",
     malayalam: "",
+    tags: [],
   });
 
   const handleClickOpen = () => {
@@ -33,7 +36,7 @@ export const AdminSections = ({ control, sections, addNewSection }) => {
     if (newSection.english.trim() && newSection.malayalam.trim()) {
       addNewSection(newSection);
       setOpen(false);
-      setNewSection({ english: "", malayalam: "" });
+      setNewSection({ english: "", malayalam: "", tags: [] });
     }
   };
 
@@ -101,6 +104,34 @@ export const AdminSections = ({ control, sections, addNewSection }) => {
               setNewSection({ ...newSection, malayalam: e.target.value })
             }
           />
+          <Grid item xs={12} mt={1}>
+            <Autocomplete
+              multiple
+              freeSolo
+              options={[]}
+              onChange={(_, value) => {
+                setNewSection((prev) => ({ ...prev, tags: value }));
+              }}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  fullWidth
+                  variant="outlined"
+                  label="Tags"
+                  placeholder="Enter tags"
+                />
+              )}
+            />
+          </Grid>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

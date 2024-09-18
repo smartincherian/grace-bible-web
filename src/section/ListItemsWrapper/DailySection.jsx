@@ -35,9 +35,6 @@ const DailySection = ({ item }) => {
           {item?.[LANGUAGE]}
         </Button>
       </Grid>
-      <Typography variant="h6" align="center" mt={3}>
-        {translate("choose-topic")}
-      </Typography>
     </>
   );
 };

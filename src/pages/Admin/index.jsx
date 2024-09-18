@@ -14,13 +14,12 @@ import {
   useGetSectionsMutation,
 } from "../../store/verses/service";
 import { BIBLE_BOOKS } from "../../utils/constants";
-import { AdminSections } from "./sections";
 import {
-  SNACK_BAR_POSITIONS,
   SNACK_BAR_SEVERITY_TYPES,
   SnackbarContext,
 } from "../../components/Snackbar";
 import useErrorToast from "../../hooks/useErrorToast";
+import { AdminSections } from "./addSections";
 
 const AdminVersesForm = () => {
   const { handleSubmit, control, reset } = useForm({
@@ -39,8 +38,6 @@ const AdminVersesForm = () => {
   const [addVerse, { isLoading: isAddingVerse }] = useAddVerseMutation();
   const [addSection, { isLoading: isAddingSection }] = useAddSectionMutation();
   const { sections = [] } = RootState()?.versesData;
-
-  const LANGUAGE = "malayalam";
 
   useEffect(() => {
     getSectionsHandler();
