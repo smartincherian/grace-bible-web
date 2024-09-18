@@ -8,15 +8,20 @@ import {
   Dialog,
   DialogContent,
   Button,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import useLocalization from "../../hooks/useLocalization";
 import { toPng } from "html-to-image";
 
 const VerseCard = ({ verse = {}, language }) => {
   const { translate } = useLocalization();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
-  const COUNT_OF_IMAGES = 8;
+  const COUNT_OF_IMAGES = 10;
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -27,15 +32,14 @@ const VerseCard = ({ verse = {}, language }) => {
 
   const handleDownload = () => {
     if (contentRef.current) {
-      const deviceWidth = window.innerWidth;
-      const deviceHeight = window.innerHeight;
+      const imageWidth = isMobile ? 720 : 1920;
+      const imageHeight = isMobile ? 1280 : 1080;
 
       toPng(contentRef.current, {
         quality: 1,
         backgroundColor: "#D1E9F6",
-        width: deviceWidth, // Set width to device width
-        height: deviceHeight, // Set height to device height
-        quality: 1, // Set high quality
+        width: imageWidth,
+        height: imageHeight,
         pixelRatio: 2,
       })
         .then((dataUrl) => {
