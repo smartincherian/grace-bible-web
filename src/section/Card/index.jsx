@@ -13,15 +13,16 @@ import {
 } from "@mui/material";
 import useLocalization from "../../hooks/useLocalization";
 import { toPng } from "html-to-image";
+import { COUNT_OF_IMAGES } from "../../utils/constants";
 
-const VerseCard = ({ verse = {}, language }) => {
+const VerseCard = ({ verse = {}, language = "malayalam" }) => {
   const { translate } = useLocalization();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
-  const COUNT_OF_IMAGES = 10;
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -30,29 +31,87 @@ const VerseCard = ({ verse = {}, language }) => {
     setOpen(false);
   };
 
-  const handleDownload = () => {
+  const generateImage = () => {
+    adjustVerseSize();
     if (contentRef.current) {
       const imageWidth = isMobile ? 720 : 1920;
       const imageHeight = isMobile ? 1280 : 1080;
 
-      toPng(contentRef.current, {
+      return toPng(contentRef.current, {
         quality: 1,
         backgroundColor: "#D1E9F6",
         width: imageWidth,
         height: imageHeight,
         pixelRatio: 2,
+      });
+    }
+    return Promise.reject("No content to capture");
+  };
+
+  const handleDownload = () => {
+    generateImage()
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "verse-image.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       })
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-          link.href = dataUrl;
-          link.download = "verse-image.png";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        })
-        .catch((err) => {
-          console.error("Error generating image:", err);
-        });
+      .catch((err) => {
+        console.error("Error generating image:", err);
+      });
+  };
+
+  const handleShare = () => {
+    generateImage()
+      .then((dataUrl) => {
+        if (navigator.share) {
+          if (isMobile) {
+            // For mobile devices, share the image
+            fetch(dataUrl)
+              .then((res) => res.blob())
+              .then((blob) => {
+                const file = new File([blob], "verse-image.png", {
+                  type: blob.type,
+                });
+                if (
+                  navigator.canShare &&
+                  navigator.canShare({ files: [file] })
+                ) {
+                  navigator
+                    .share({
+                      files: [file],
+                      title: "Bible Verse",
+                      text: "Check out this Bible verse image!",
+                    })
+                    .catch((err) => console.error("Error sharing:", err));
+                } else {
+                  console.error("Sharing files is not supported.");
+                }
+              });
+          } else {
+            // For desktops, fallback to sharing a message or URL
+            navigator
+              .share({
+                title: "Bible Verse",
+                text: "Check out this Bible verse!",
+                url: window.location.href, // Optional: share current page URL
+              })
+              .catch((err) => console.error("Error sharing:", err));
+          }
+        } else {
+          console.warn("Web Share API not supported.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error generating image:", err);
+      });
+  };
+
+  const adjustVerseSize = () => {
+    if (contentRef.current) {
+      contentRef.current.style.fontSize = isMobile ? "24px" : "52px"; // Adjust the size as needed
     }
   };
 
@@ -156,6 +215,13 @@ const VerseCard = ({ verse = {}, language }) => {
             mb: "1rem",
           }}
         >
+          <Button
+            variant="contained"
+            sx={{ marginTop: "16px" }}
+            onClick={handleShare}
+          >
+            Share
+          </Button>
           <Button
             variant="contained"
             sx={{ marginTop: "16px" }}

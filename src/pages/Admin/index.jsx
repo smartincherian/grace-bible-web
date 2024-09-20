@@ -5,7 +5,7 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { RootState } from "../../store";
 import {
@@ -20,8 +20,9 @@ import {
 } from "../../components/Snackbar";
 import useErrorToast from "../../hooks/useErrorToast";
 import { AdminSections } from "./addSections";
+import VerseCard from "../../section/Card";
 
-const AdminVersesForm = () => {
+const AdminVersesForm = ({ type }) => {
   const { handleSubmit, control, reset } = useForm({
     defaultValues: {
       book: "",
@@ -38,6 +39,8 @@ const AdminVersesForm = () => {
   const [addVerse, { isLoading: isAddingVerse }] = useAddVerseMutation();
   const [addSection, { isLoading: isAddingSection }] = useAddSectionMutation();
   const { sections = [] } = RootState()?.versesData;
+  const [showVerseCard, setShowVerseCard] = useState(false);
+  const [wallpaperData, setWallpaperData] = useState(null);
 
   useEffect(() => {
     getSectionsHandler();
@@ -53,12 +56,20 @@ const AdminVersesForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await addVerse(data);
-      if (response?.data?.success) {
-        showSnackbar(response?.data?.message, SNACK_BAR_SEVERITY_TYPES.SUCCESS);
-        reset();
+      if (type === "admin") {
+        const response = await addVerse(data);
+        if (response?.data?.success) {
+          showSnackbar(
+            response?.data?.message,
+            SNACK_BAR_SEVERITY_TYPES.SUCCESS
+          );
+          reset();
+        } else {
+          showErrorMessage({}, response?.data?.message);
+        }
       } else {
-        showErrorMessage({}, response?.data?.message);
+        setWallpaperData(data);
+        setShowVerseCard(true);
       }
     } catch (error) {
       showErrorMessage(error);
@@ -147,52 +158,71 @@ const AdminVersesForm = () => {
               )}
             />
           </Grid>
-
-          {/* Malayalam */}
-          <Grid item xs={12}>
-            <Controller
-              name="malayalam"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label="Malayalam"
-                  variant="outlined"
-                  multiline
-                  rows={3}
-                  required
-                  placeholder="Ex : ദൈവത്തിന് ഒന്നും അസാധ്യമല്ല"
+          {type === "admin" ? (
+            <>
+              {/* Malayalam */}
+              <Grid item xs={12}>
+                <Controller
+                  name="malayalam"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label="Malayalam"
+                      variant="outlined"
+                      multiline
+                      rows={3}
+                      required
+                      placeholder="Ex : ദൈവത്തിന് ഒന്നും അസാധ്യമല്ല"
+                    />
+                  )}
                 />
-              )}
-            />
-          </Grid>
-
-          {/* English */}
-          <Grid item xs={12}>
-            <Controller
-              name="english"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  label="English"
-                  variant="outlined"
-                  multiline
-                  rows={3}
-                  placeholder="Ex : For nothing will be impossible with God"
+              </Grid>
+              {/* English */}
+              <Grid item xs={12}>
+                <Controller
+                  name="english"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      label="English"
+                      variant="outlined"
+                      multiline
+                      rows={3}
+                      placeholder="Ex : For nothing will be impossible with God"
+                    />
+                  )}
                 />
-              )}
-            />
-          </Grid>
-
-          {/* Section */}
-          <AdminSections
-            control={control}
-            sections={sections}
-            addNewSection={handleSectionAdd}
-          />
+              </Grid>
+              {/* Section */}
+              <AdminSections
+                control={control}
+                sections={sections}
+                addNewSection={handleSectionAdd}
+              />
+            </>
+          ) : (
+            <Grid item xs={12}>
+              <Controller
+                name="malayalam"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="Verse"
+                    variant="outlined"
+                    multiline
+                    rows={3}
+                    placeholder="Ex : For nothing will be impossible with God"
+                  />
+                )}
+              />
+            </Grid>
+          )}
 
           {/* Submit Button */}
           <Grid item xs={12}>
@@ -202,6 +232,11 @@ const AdminVersesForm = () => {
           </Grid>
         </Grid>
       </form>
+      {type === "wallpaper" && showVerseCard && wallpaperData && (
+        <Grid mt={5}>
+          <VerseCard verse={wallpaperData} />
+        </Grid>
+      )}
     </Container>
   );
 };

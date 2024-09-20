@@ -1,3 +1,5 @@
+export const COUNT_OF_IMAGES = 14;
+
 export const BIBLE_BOOKS = [
   { label: "Genesis (ഉല്പത്തി)", value: "genesis" },
   { label: "Exodus (പുറപ്പാട്)", value: "exodus" },

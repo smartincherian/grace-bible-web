@@ -16,8 +16,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/sections/:id" element={<Verses />} />
-            <Route path="/admin" element={<AdminVersesForm />} />
+            <Route path="/admin" element={<AdminVersesForm type="admin" />} />
             <Route path="/admin/section" element={<AdminSectionsForm />} />
+            <Route
+              path="/wallp"
+              element={<AdminVersesForm type="wallpaper" />}
+            />
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>
