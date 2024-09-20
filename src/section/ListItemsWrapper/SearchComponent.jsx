@@ -27,9 +27,11 @@ const SearchComponent = () => {
     useSearchSectionsMutation();
   const [getTags, { isLoading: isLoading }] = useGetTagsMutation();
   const { sections = [], tags = [] } = RootState()?.versesData;
+
   useEffect(() => {
     getTags();
   }, []);
+
   useEffect(() => {
     if (sections && sections?.length) {
       const result = sections.map((item) => ({
@@ -40,12 +42,14 @@ const SearchComponent = () => {
     }
   }, [sections]);
 
-  const handleSearch = async () => {
+  const handleSearch = async (search) => {
     try {
+      const searchWord = search ? search : searchTerm;
       setIsSearchApplied(true);
-      const convertedSearch = /^[A-Za-z]+$/.test(searchTerm)
-        ? searchTerm.toLowerCase()
-        : searchTerm;
+      setSearchTerm(search);
+      const convertedSearch = /^[A-Za-z]+$/.test(searchWord)
+        ? searchWord.toLowerCase()
+        : searchWord;
       await searchSection(convertedSearch);
     } catch (error) {}
   };
@@ -72,12 +76,15 @@ const SearchComponent = () => {
             searchOptions.find((option) => option.label === searchTerm) || null
           }
           onChange={(event, newValue) => {
-            if (newValue?.value) {
-              setSearchTerm(newValue.value);
-            } else if (newValue) {
-              setSearchTerm(newValue);
+            if (newValue) {
+              handleSearch(newValue);
             } else {
               setSearchTerm("");
+            }
+          }}
+          onInputChange={(event, newInputValue, reason) => {
+            if (reason === "clear") {
+              clearSearch();
             }
           }}
           renderInput={(params) => (
@@ -88,34 +95,6 @@ const SearchComponent = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Ex : Faith | വിശ്വാസം"
               fullWidth
-              InputProps={{
-                ...params.InputProps,
-                startAdornment: (
-                  <>
-                    <InputAdornment position="end">
-                      {isSearchApplied ? (
-                        <IconButton
-                          onClick={clearSearch}
-                          edge="end"
-                          sx={{ color: "#E91E63" }}
-                        >
-                          <SearchOffIcon />
-                        </IconButton>
-                      ) : (
-                        <IconButton
-                          onClick={handleSearch}
-                          edge="end"
-                          color="primary"
-                          disabled={!searchTerm}
-                        >
-                          <SearchIcon />
-                        </IconButton>
-                      )}
-                    </InputAdornment>
-                    {params.InputProps.startAdornment}
-                  </>
-                ),
-              }}
             />
           )}
         />
