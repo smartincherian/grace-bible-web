@@ -13,6 +13,8 @@ import {
   TextField,
   Autocomplete,
   Chip,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
 
@@ -48,29 +50,32 @@ export const AdminSections = ({ control, sections, addNewSection }) => {
           control={control}
           defaultValue={[]}
           render={({ field }) => (
-            <Select
-              {...field}
-              multiple
-              fullWidth
-              label="Section"
-              variant="outlined"
-              required
-              value={field.value || []}
-              renderValue={(selected) =>
-                selected
-                  .map((id) => sections.find((s) => s.id === id)?.english)
-                  .join(", ")
-              }
-            >
-              {sections.map((section) => (
-                <MenuItem key={section.id} value={section.id}>
-                  <Checkbox checked={field.value.indexOf(section.id) > -1} />
-                  <ListItemText
-                    primary={`${section.english} (${section.malayalam})`}
-                  />
-                </MenuItem>
-              ))}
-            </Select>
+            <FormControl fullWidth variant="outlined" required>
+              <InputLabel id="section-label">Section</InputLabel>
+              <Select
+                {...field}
+                multiple
+                fullWidth
+                label="Section"
+                variant="outlined"
+                required
+                value={field.value || []}
+                renderValue={(selected) =>
+                  selected
+                    .map((id) => sections.find((s) => s.id === id)?.english)
+                    .join(", ")
+                }
+              >
+                {sections.map((section) => (
+                  <MenuItem key={section.id} value={section.id}>
+                    <Checkbox checked={field.value.indexOf(section.id) > -1} />
+                    <ListItemText
+                      primary={`${section.english} (${section.malayalam})`}
+                    />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           )}
         />
         {/* Button to add new section */}
