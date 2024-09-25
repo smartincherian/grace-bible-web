@@ -7,6 +7,7 @@ import { theme } from "./theme";
 import { ThemeProvider } from "@mui/material";
 import AdminVersesForm from "./pages/Admin";
 import AdminSectionsForm from "./pages/Admin/sections";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               path="/wallp"
               element={<AdminVersesForm type="wallpaper" />}
             />
+            <Route path="/admin/dashboard" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>

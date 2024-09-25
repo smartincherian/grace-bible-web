@@ -8,6 +8,7 @@ import {
   sectionsSearch,
   sectionUpdate,
 } from "../../firebase/verses/sections";
+import { fetchStats } from "../../firebase/verses/statistics";
 
 export const versesApi = createApi({
   reducerPath: "verses",
@@ -118,6 +119,19 @@ export const versesApi = createApi({
         }
       },
     }),
+    getStats: builder.mutation({
+      async queryFn() {
+        try {
+          const result = await fetchStats();
+          return {
+            data: result,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
   }),
 });
 
@@ -129,4 +143,5 @@ export const {
   useUpdateSectionMutation,
   useSearchSectionsMutation,
   useGetTagsMutation,
+  useGetStatsMutation,
 } = versesApi;
