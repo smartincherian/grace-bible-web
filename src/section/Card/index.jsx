@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Card,
@@ -21,7 +21,23 @@ const VerseCard = ({ verse = {}, language = "malayalam" }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [open, setOpen] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [backgroundImage, setBackgroundImage] = useState("");
   const contentRef = useRef(null);
+
+  useEffect(() => {
+    if (open) {
+      const image = new Image();
+      image.onload = () => {
+        setBackgroundImage(`url(${image.src})`);
+        setImageLoaded(true);
+      };
+      image.src = getRandomImage();
+    } else {
+      setImageLoaded(false);
+      setBackgroundImage("");
+    }
+  }, [open]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,7 +48,7 @@ const VerseCard = ({ verse = {}, language = "malayalam" }) => {
   };
 
   const generateImage = () => {
-    adjustVerseSize();
+    // adjustVerseSize();
     if (contentRef.current) {
       const imageWidth = isMobile ? 720 : 1920;
       const imageHeight = isMobile ? 1280 : 1080;
@@ -133,6 +149,9 @@ const VerseCard = ({ verse = {}, language = "malayalam" }) => {
               borderRadius: 4,
               transition: "transform 0.3s ease",
               cursor: "pointer",
+              maxWidth: "100%",
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
               "&:hover": {
                 transform: "translateY(-5px)",
               },
@@ -181,20 +200,34 @@ const VerseCard = ({ verse = {}, language = "malayalam" }) => {
             height: "100%",
             width: "100%",
             position: "relative",
-            padding: "32px",
             boxSizing: "border-box",
-            backgroundImage: `url(${getRandomImage()})`,
-            backgroundSize: "cover", // Ensures the image covers the whole area
-            backgroundPosition: "center", // Centers the image
-            backgroundRepeat: "no-repeat", //
+            maxWidth: "100%",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+            backgroundColor: "#FEFAE0",
+            backgroundImage: backgroundImage,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
             border: "8px solid #FEFAE0",
+            transition: "background-image 0.5s ease-in-out",
+            opacity: imageLoaded ? 1 : 0.7,
           }}
         >
           <Box
             sx={{
               textAlign: "center",
-              padding: "24px",
               color: "primary.main",
+              backgroundColor: "rgba(254, 250, 224, 0.8)", // Semi-transparent background for text
+              borderRadius: "8px",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "32px",
+              overflowY: "auto",
+              pt: 20,
             }}
           >
             <Typography

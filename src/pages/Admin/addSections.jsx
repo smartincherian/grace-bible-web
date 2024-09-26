@@ -15,6 +15,7 @@ import {
   Chip,
   FormControl,
   InputLabel,
+  Typography,
 } from "@mui/material";
 import { Controller } from "react-hook-form";
 
@@ -82,6 +83,12 @@ export const AdminSections = ({ control, sections, addNewSection }) => {
         <Button variant="outlined" onClick={handleClickOpen} sx={{ mt: 2 }}>
           Add New Section
         </Button>
+        <Grid>
+          <Typography variant="caption" color={"primary"}>
+            Please add new section only if the same is not present in existing
+            sections in the above drop down
+          </Typography>
+        </Grid>
       </Grid>
 
       {/* Dialog for adding new section */}
