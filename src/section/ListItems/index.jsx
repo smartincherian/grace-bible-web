@@ -16,30 +16,34 @@ const ListItems = ({ items = [], isVerses, isSection }) => {
 
   return (
     <Grid container spacing={2} justifyContent="center">
-      {items.map((item) => {
-        if (isVerses) {
-          return <VerseCard key={item.id} verse={item} language={LANGUAGE} />;
-        }
+      {items?.length === 0 && isVerses ? (
+        <>Please check later, currently no verses have been added</>
+      ) : (
+        items.map((item) => {
+          if (isVerses) {
+            return <VerseCard key={item.id} verse={item} language={LANGUAGE} />;
+          }
 
-        return (
-          <Grid item xs={12} sm={4} key={item.id}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={() => itemClickHandler(item.id)}
-              fullWidth
-              sx={{
-                py: 2,
-                textTransform: "none",
-                borderRadius: 2,
-              }}
-            >
-              {item[LANGUAGE]}
-            </Button>
-          </Grid>
-        );
-      })}
+          return (
+            <Grid item xs={12} sm={4} key={item.id}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={() => itemClickHandler(item.id)}
+                fullWidth
+                sx={{
+                  py: 2,
+                  textTransform: "none",
+                  borderRadius: 2,
+                }}
+              >
+                {item[LANGUAGE]}
+              </Button>
+            </Grid>
+          );
+        })
+      )}
     </Grid>
   );
 };

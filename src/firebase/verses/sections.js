@@ -4,6 +4,7 @@ import {
   doc,
   getDocs,
   query,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -48,6 +49,8 @@ export const sectionsSearch = async (search) => {
 
 export const sectionAdd = async (data) => {
   try {
+    const now = Timestamp.now();
+    data.createdAt = now.toMillis();
     const docRef = await addDoc(collectionRef, data);
     return { ...data, id: docRef.id };
   } catch (error) {

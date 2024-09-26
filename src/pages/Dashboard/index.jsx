@@ -31,8 +31,6 @@ const Dashboard = ({ type }) => {
     }
   };
 
-  console.log({ now: now.toLocaleString() });
-
   return (
     <Container maxWidth="sm" style={{ marginTop: "20px" }}>
       <Grid container spacing={3}>
@@ -43,6 +41,13 @@ const Dashboard = ({ type }) => {
             gutterBottom
           >
             Statistics
+          </Typography>
+          <Typography
+            variant="caption"
+            align="center"
+            sx={{ color: "grey.600", fontSize: "0.75rem" }}
+          >
+            Log time: {now.toLocaleString()}
           </Typography>
         </Grid>
 
@@ -114,13 +119,6 @@ const Dashboard = ({ type }) => {
           </Button>
         </Grid>
       </Grid>
-      <Typography
-        variant="caption"
-        align="center"
-        sx={{ color: "grey.600", fontSize: "0.75rem" }}
-      >
-        Log time: {now.toLocaleString()}
-      </Typography>
     </Container>
   );
 };

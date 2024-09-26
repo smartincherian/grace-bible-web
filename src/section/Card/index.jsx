@@ -122,48 +122,53 @@ const VerseCard = ({ verse = {}, language = "malayalam" }) => {
 
   return (
     <>
-      <Grid item xs={12} sm={6} md={4} lg={4}>
-        <Card
-          onClick={handleClickOpen}
-          sx={{
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            borderRadius: 4,
-            transition: "transform 0.3s ease",
-            cursor: "pointer",
-            "&:hover": {
-              transform: "translateY(-5px)",
-            },
-          }}
-        >
-          <CardContent
+      {verse[language] ? (
+        <Grid item xs={12} sm={6} md={4} lg={4}>
+          <Card
+            onClick={handleClickOpen}
             sx={{
-              p: 4,
-              textAlign: "center",
-              backgroundColor: "#D1E9F6",
-              flexGrow: 1,
+              height: "100%",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              flexDirection: "column",
+              borderRadius: 4,
+              transition: "transform 0.3s ease",
+              cursor: "pointer",
+              "&:hover": {
+                transform: "translateY(-5px)",
+              },
             }}
           >
-            <Typography variant="h6">{verse[language]}</Typography>
-          </CardContent>
-          <Box
-            sx={{
-              bgcolor: "primary.main",
-              color: "white",
-              p: 1.5,
-              textAlign: "right",
-            }}
-          >
-            <Typography variant="body2">
-              {`${translate(verse.book)} ${verse.chapter}:${verse.verse}`}
-            </Typography>
-          </Box>
-        </Card>
-      </Grid>
+            <CardContent
+              sx={{
+                p: 4,
+                textAlign: "center",
+                backgroundColor: "#D1E9F6",
+                flexGrow: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography variant="h6">{verse[language]}</Typography>
+            </CardContent>
+            <Box
+              sx={{
+                bgcolor: "primary.main",
+                color: "white",
+                p: 1.5,
+                textAlign: "right",
+              }}
+            >
+              <Typography variant="body2">
+                {`${translate(verse.book)} ${verse.chapter}:${verse.verse}`}
+              </Typography>
+            </Box>
+          </Card>
+        </Grid>
+      ) : (
+        <></>
+      )}
+
       {/* Fullscreen Dialog */}
       <Dialog open={open} onClose={handleClose} fullScreen>
         <DialogContent

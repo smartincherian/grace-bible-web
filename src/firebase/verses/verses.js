@@ -1,4 +1,11 @@
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  query,
+  Timestamp,
+  where,
+} from "firebase/firestore";
 import { COLLECTION_NAMES } from "../constants";
 import { DB } from "../../config";
 
@@ -39,6 +46,8 @@ export const verseAdd = async (data) => {
         message: "Same verse already exists",
       };
     }
+    const now = Timestamp.now();
+    data.createdAt = now.toMillis();
     await addDoc(collectionRef, data);
     return { success: true, message: "Verse added successfully" };
   } catch (error) {
