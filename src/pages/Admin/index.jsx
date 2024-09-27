@@ -29,7 +29,6 @@ const AdminVersesForm = ({ type }) => {
       chapter: "",
       english: "",
       malayalam: "",
-      section: "",
       verse: "",
     },
   });
@@ -57,6 +56,13 @@ const AdminVersesForm = ({ type }) => {
   const onSubmit = async (data) => {
     try {
       if (type === "admin") {
+        if (!data.english && !data.malayalam) {
+          showErrorMessage(
+            {},
+            "Verse : Either Malayalam or English is required"
+          );
+          return;
+        }
         const response = await addVerse(data);
         if (response?.data?.success) {
           showSnackbar(
@@ -173,7 +179,8 @@ const AdminVersesForm = ({ type }) => {
                       variant="outlined"
                       multiline
                       rows={3}
-                      required
+                      helperText={"Maximum length : 300"}
+                      inputProps={{ maxLength: 300 }}
                       placeholder="Ex : ദൈവത്തിന് ഒന്നും അസാധ്യമല്ല"
                     />
                   )}
@@ -191,6 +198,8 @@ const AdminVersesForm = ({ type }) => {
                       label="English"
                       variant="outlined"
                       multiline
+                      helperText={"Maximum length : 300"}
+                      inputProps={{ maxLength: 300 }}
                       rows={3}
                       placeholder="Ex : For nothing will be impossible with God"
                     />
