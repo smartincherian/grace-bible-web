@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Grid,
@@ -11,11 +11,13 @@ import {
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useGetStatsMutation } from "../../store/verses/service";
+import VersesTable from "../../section/AllVerses";
 
 const Dashboard = ({ type }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [getStats, { isLoading, data }] = useGetStatsMutation();
+  const [showAll, setShowAll] = useState(true);
 
   const now = new Date();
 
@@ -31,95 +33,103 @@ const Dashboard = ({ type }) => {
     }
   };
 
+  const showAllVersesHandler = () => {
+    setShowAll(true);
+  };
+
   return (
-    <Container maxWidth="sm" style={{ marginTop: "20px" }}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Typography
-            variant={isMobile ? "h5" : "h4"}
-            align="center"
-            gutterBottom
-          >
-            Statistics
-          </Typography>
-          <Typography
-            variant="caption"
-            align="center"
-            sx={{ color: "grey.600", fontSize: "0.75rem" }}
-          >
-            Log time: {now.toLocaleString()}
-          </Typography>
-        </Grid>
+    <>
+      <Container maxWidth="sm" style={{ marginTop: "20px" }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Typography
+              variant={isMobile ? "h5" : "h4"}
+              align="center"
+              gutterBottom
+            >
+              Statistics
+            </Typography>
+            <Typography
+              variant="caption"
+              align="center"
+              sx={{ color: "grey.600", fontSize: "0.75rem" }}
+            >
+              Log time: {now.toLocaleString()}
+            </Typography>
+          </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardContent>
-              <Typography variant={isMobile ? "h6" : "h5"} align="center">
-                Total Bible Verses
-              </Typography>
-              {isLoading ? (
-                <Skeleton
-                  variant="text"
-                  width={100}
-                  height={40}
-                  style={{ margin: "0 auto" }}
-                />
-              ) : (
-                <Typography variant="h4" align="center" color="primary">
-                  {data?.totalVersesCount || 0}
+          <Grid item xs={12} sm={6}>
+            <Card>
+              <CardContent>
+                <Typography variant={isMobile ? "h6" : "h5"} align="center">
+                  Total Bible Verses
                 </Typography>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
+                {isLoading ? (
+                  <Skeleton
+                    variant="text"
+                    width={100}
+                    height={40}
+                    style={{ margin: "0 auto" }}
+                  />
+                ) : (
+                  <Typography variant="h4" align="center" color="primary">
+                    {data?.totalVersesCount || 0}
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <Card>
-            <CardContent>
-              <Typography variant={isMobile ? "h6" : "h5"} align="center">
-                Total Sections
-              </Typography>
-              {isLoading ? (
-                <Skeleton
-                  variant="text"
-                  width={100}
-                  height={40}
-                  style={{ margin: "0 auto" }}
-                />
-              ) : (
-                <Typography variant="h4" align="center" color="primary">
-                  {data?.totalSectionsCount || 0}
+          <Grid item xs={12} sm={6}>
+            <Card>
+              <CardContent>
+                <Typography variant={isMobile ? "h6" : "h5"} align="center">
+                  Total Sections
                 </Typography>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
+                {isLoading ? (
+                  <Skeleton
+                    variant="text"
+                    width={100}
+                    height={40}
+                    style={{ margin: "0 auto" }}
+                  />
+                ) : (
+                  <Typography variant="h4" align="center" color="primary">
+                    {data?.totalSectionsCount || 0}
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            size={isMobile ? "small" : "medium"}
-            style={{ marginTop: "10px" }}
-          >
-            Edit Bible Verse
-          </Button>
-        </Grid>
+          <Grid item xs={12} sm={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              size={isMobile ? "small" : "medium"}
+              onClick={showAllVersesHandler}
+              style={{ marginTop: "10px" }}
+            >
+              Show all Bible Verse with section
+            </Button>
+          </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <Button
-            variant="contained"
-            color="secondary"
-            fullWidth
-            size={isMobile ? "small" : "medium"}
-            style={{ marginTop: "10px" }}
-          >
-            Edit Section
-          </Button>
+          <Grid item xs={12} sm={6}>
+            <Button
+              variant="contained"
+              color="secondary"
+              fullWidth
+              size={isMobile ? "small" : "medium"}
+              style={{ marginTop: "10px" }}
+            >
+              Edit Section
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+      {showAll && <VersesTable />}
+    </>
   );
 };
 

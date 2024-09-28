@@ -1,6 +1,8 @@
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   query,
   Timestamp,
@@ -55,3 +57,52 @@ export const verseAdd = async (data) => {
     throw error;
   }
 };
+
+export async function fetchAllVerses() {
+  try {
+    const versesQuerySnapshot = await getDocs(collection(DB, "verses"));
+
+    const versesData = [];
+    const uniqueSectionIds = new Set();
+
+    versesQuerySnapshot.forEach((doc) => {
+      const verseData = {
+        ...doc.data(),
+        id: doc.id,
+      };
+      versesData.push(verseData);
+
+      const sectionIds = verseData.sectionIds || [];
+      sectionIds.forEach((sectionId) => uniqueSectionIds.add(sectionId));
+    });
+
+    const sectionTitles = {};
+    for (const sectionId of uniqueSectionIds) {
+      const sectionDocRef = doc(DB, "sections", sectionId);
+      const sectionDocSnap = await getDoc(sectionDocRef);
+
+      if (sectionDocSnap.exists()) {
+        sectionTitles[sectionId] = sectionDocSnap.data().malayalam;
+      } else {
+        console.warn(`Section with ID ${sectionId} not found`);
+      }
+    }
+
+    // 4. Combine verse data with section titles
+    const versesWithSectionTitles = versesData
+      .map((verse) => ({
+        ...verse,
+        sectionTitles: (verse.sectionIds || []).map(
+          (sectionId) => sectionTitles[sectionId] || "Unknown Section"
+        ),
+      }))
+      .sort((a, b) => {
+        return a.createdAt - b.createdAt;
+      });
+    console.log({ versesWithSectionTitles });
+    return versesWithSectionTitles;
+  } catch (error) {
+    console.error("Error fetching verses with section titles:", error);
+    throw error;
+  }
+}

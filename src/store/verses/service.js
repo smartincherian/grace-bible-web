@@ -1,6 +1,10 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setSections, setTags, setVerses } from "./slice";
-import { fetchVerses, verseAdd } from "../../firebase/verses/verses";
+import {
+  fetchAllVerses,
+  fetchVerses,
+  verseAdd,
+} from "../../firebase/verses/verses";
 import {
   fetchSections,
   fetchSectionsTags,
@@ -132,6 +136,19 @@ export const versesApi = createApi({
         }
       },
     }),
+    getAllVerses: builder.mutation({
+      async queryFn() {
+        try {
+          const result = await fetchAllVerses();
+          return {
+            data: result,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
   }),
 });
 
@@ -144,4 +161,5 @@ export const {
   useSearchSectionsMutation,
   useGetTagsMutation,
   useGetStatsMutation,
+  useGetAllVersesMutation,
 } = versesApi;
