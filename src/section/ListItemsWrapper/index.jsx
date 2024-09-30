@@ -61,7 +61,7 @@ const ListItemsWrapper = ({ heading, image, isSection, isVerses, loading }) => {
           {isSection && <DailySection item={todaysSection} />}
           {isSection && <SearchComponent />}
 
-          {loading || !todaysSection ? (
+          {loading || (!todaysSection && isSection) ? (
             <Skeleton
               variant="text"
               width="30%"

@@ -17,12 +17,15 @@ const Dashboard = ({ type }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [getStats, { isLoading, data }] = useGetStatsMutation();
-  const [showAll, setShowAll] = useState(true);
+  const [showAll, setShowAll] = useState(false);
 
   const now = new Date();
 
   useEffect(() => {
     getStatsHandler();
+    return () => {
+      setShowAll(false);
+    };
   }, []);
 
   const getStatsHandler = async () => {
