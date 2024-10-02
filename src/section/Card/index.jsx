@@ -50,8 +50,12 @@ const VerseCard = ({ verse = {}, language = "malayalam" }) => {
   const generateImage = () => {
     // adjustVerseSize();
     if (contentRef.current) {
-      const imageWidth = isMobile ? 720 : 1920;
-      const imageHeight = isMobile ? 1280 : 1080;
+      const imageWidth = isMobile
+        ? window.screen.width
+        : window.screen.width * window.devicePixelRatio;
+      const imageHeight = isMobile
+        ? window.screen.height
+        : window.screen.height * window.devicePixelRatio;
 
       return toPng(contentRef.current, {
         quality: 1,
@@ -227,7 +231,6 @@ const VerseCard = ({ verse = {}, language = "malayalam" }) => {
               alignItems: "center",
               padding: "32px",
               overflowY: "auto",
-              pt: 20,
             }}
           >
             <Typography
