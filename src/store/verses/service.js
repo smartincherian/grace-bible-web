@@ -4,6 +4,7 @@ import {
   fetchAllVerses,
   fetchVerses,
   verseAdd,
+  verseCheck,
 } from "../../firebase/verses/verses";
 import {
   fetchSections,
@@ -149,6 +150,19 @@ export const versesApi = createApi({
         }
       },
     }),
+    checkIfExistingVerse: builder.mutation({
+      async queryFn(data, { dispatch, getState }) {
+        try {
+          const response = await verseCheck(data);
+          return {
+            data: response,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
   }),
 });
 
@@ -162,4 +176,5 @@ export const {
   useGetTagsMutation,
   useGetStatsMutation,
   useGetAllVersesMutation,
+  useCheckIfExistingVerseMutation,
 } = versesApi;

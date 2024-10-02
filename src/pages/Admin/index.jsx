@@ -11,6 +11,7 @@ import { RootState } from "../../store";
 import {
   useAddSectionMutation,
   useAddVerseMutation,
+  useCheckIfExistingVerseMutation,
   useGetSectionsMutation,
 } from "../../store/verses/service";
 import { BIBLE_BOOKS } from "../../utils/constants";
@@ -23,7 +24,7 @@ import { AdminSections } from "./addSections";
 import VerseCard from "../../section/Card";
 
 const AdminVersesForm = ({ type }) => {
-  const { handleSubmit, control, reset } = useForm({
+  const { handleSubmit, control, reset, watch } = useForm({
     defaultValues: {
       book: "",
       chapter: "",
@@ -37,9 +38,12 @@ const AdminVersesForm = ({ type }) => {
   const [getSections, { isLoading }] = useGetSectionsMutation();
   const [addVerse, { isLoading: isAddingVerse }] = useAddVerseMutation();
   const [addSection, { isLoading: isAddingSection }] = useAddSectionMutation();
+  const [checkUnique, { isLoading: isChecking }] =
+    useCheckIfExistingVerseMutation();
   const { sections = [] } = RootState()?.versesData;
   const [showVerseCard, setShowVerseCard] = useState(false);
   const [wallpaperData, setWallpaperData] = useState(null);
+  const [showNewVerseForm, setShowNewVerseForm] = useState();
 
   useEffect(() => {
     getSectionsHandler();
@@ -93,6 +97,26 @@ const AdminVersesForm = ({ type }) => {
     }
 
     reset();
+  };
+
+  const book = watch("book");
+  const chapter = watch("chapter");
+  const verse = watch("verse");
+
+  useEffect(() => {
+    if (book && chapter && verse) {
+      checkUniqueVerse();
+    }
+  }, [book, chapter, verse]);
+
+  const checkUniqueVerse = async () => {
+    const { data } = await checkUnique({ book, chapter, verse });
+    if (data?.isUnique) {
+      setShowNewVerseForm(true);
+    } else {
+      showErrorMessage({}, data?.message);
+      setShowNewVerseForm(false);
+    }
   };
 
   return (
@@ -166,52 +190,56 @@ const AdminVersesForm = ({ type }) => {
           </Grid>
           {type === "admin" ? (
             <>
-              {/* Malayalam */}
-              <Grid item xs={12}>
-                <Controller
-                  name="malayalam"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label="Malayalam"
-                      variant="outlined"
-                      multiline
-                      rows={3}
-                      helperText={"Maximum length : 300"}
-                      inputProps={{ maxLength: 300 }}
-                      placeholder="Ex : ദൈവത്തിന് ഒന്നും അസാധ്യമല്ല"
+              {showNewVerseForm && (
+                <>
+                  {/* Malayalam */}
+                  <Grid item xs={12}>
+                    <Controller
+                      name="malayalam"
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          fullWidth
+                          label="Malayalam"
+                          variant="outlined"
+                          multiline
+                          rows={3}
+                          helperText={"Maximum length : 300"}
+                          inputProps={{ maxLength: 300 }}
+                          placeholder="Ex : ദൈവത്തിന് ഒന്നും അസാധ്യമല്ല"
+                        />
+                      )}
                     />
-                  )}
-                />
-              </Grid>
-              {/* English */}
-              <Grid item xs={12}>
-                <Controller
-                  name="english"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      label="English"
-                      variant="outlined"
-                      multiline
-                      helperText={"Maximum length : 300"}
-                      inputProps={{ maxLength: 300 }}
-                      rows={3}
-                      placeholder="Ex : For nothing will be impossible with God"
+                  </Grid>
+                  {/* English */}
+                  <Grid item xs={12}>
+                    <Controller
+                      name="english"
+                      control={control}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          fullWidth
+                          label="English"
+                          variant="outlined"
+                          multiline
+                          helperText={"Maximum length : 300"}
+                          inputProps={{ maxLength: 300 }}
+                          rows={3}
+                          placeholder="Ex : For nothing will be impossible with God"
+                        />
+                      )}
                     />
-                  )}
-                />
-              </Grid>
-              {/* Section */}
-              <AdminSections
-                control={control}
-                sections={sections}
-                addNewSection={handleSectionAdd}
-              />
+                  </Grid>
+                  {/* Section */}
+                  <AdminSections
+                    control={control}
+                    sections={sections}
+                    addNewSection={handleSectionAdd}
+                  />
+                </>
+              )}
             </>
           ) : (
             <Grid item xs={12}>

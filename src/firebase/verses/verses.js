@@ -33,6 +33,18 @@ export const fetchVerses = async (id) => {
 
 export const verseAdd = async (data) => {
   try {
+    const now = Timestamp.now();
+    data.createdAt = now.toMillis();
+    await addDoc(collectionRef, data);
+    return { success: true, message: "Verse added successfully" };
+  } catch (error) {
+    console.error("Error [verseAdd]:", error);
+    throw error;
+  }
+};
+
+export const verseCheck = async (data) => {
+  try {
     const q = query(
       collectionRef,
       where("book", "==", data.book),
@@ -44,16 +56,17 @@ export const verseAdd = async (data) => {
 
     if (!querySnapshot.empty) {
       return {
-        success: false,
+        isUnique: false,
         message: "Same verse already exists",
       };
+    } else {
+      return {
+        isUnique: true,
+        message: "Same verse doesn't exists",
+      };
     }
-    const now = Timestamp.now();
-    data.createdAt = now.toMillis();
-    await addDoc(collectionRef, data);
-    return { success: true, message: "Verse added successfully" };
   } catch (error) {
-    console.error("Error [verseAdd]:", error);
+    console.error("Error [verseCheck]:", error);
     throw error;
   }
 };
