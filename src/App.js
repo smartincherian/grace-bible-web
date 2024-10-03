@@ -24,6 +24,10 @@ function App() {
               element={<AdminVersesForm type="wallpaper" />}
             />
             <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route
+              path="/admin/verse/:id"
+              element={<AdminVersesForm type="admin" />}
+            />
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>

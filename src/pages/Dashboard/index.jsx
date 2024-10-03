@@ -12,19 +12,20 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useGetStatsMutation } from "../../store/verses/service";
 import VersesTable from "../../section/AllVerses";
+import { INITIAL_STATE, VERSES_SHOWING_TYPES } from "./constants";
 
 const Dashboard = ({ type }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [getStats, { isLoading, data }] = useGetStatsMutation();
-  const [showAll, setShowAll] = useState(false);
+  const [showVerses, setShowVerses] = useState(INITIAL_STATE);
 
   const now = new Date();
 
   useEffect(() => {
     getStatsHandler();
     return () => {
-      setShowAll(false);
+      setShowVerses(INITIAL_STATE);
     };
   }, []);
 
@@ -37,7 +38,20 @@ const Dashboard = ({ type }) => {
   };
 
   const showAllVersesHandler = () => {
-    setShowAll(true);
+    setShowVerses({ show: true, type: VERSES_SHOWING_TYPES.ALL_VERSES });
+  };
+  const showConditionalVersesHandler = (lang) => {
+    if (lang === "english") {
+      setShowVerses({
+        show: true,
+        type: VERSES_SHOWING_TYPES.BLANK_ENGLISH,
+      });
+    } else if (lang === "malayalam") {
+      setShowVerses({
+        show: true,
+        type: VERSES_SHOWING_TYPES.BLANK_MALAYALAM,
+      });
+    }
   };
 
   return (
@@ -106,7 +120,7 @@ const Dashboard = ({ type }) => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <Button
+            {/* <Button
               variant="contained"
               color="primary"
               fullWidth
@@ -115,11 +129,32 @@ const Dashboard = ({ type }) => {
               style={{ marginTop: "10px" }}
             >
               Show all Bible Verse with section
+            </Button> */}
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              size={isMobile ? "small" : "medium"}
+              onClick={() => showConditionalVersesHandler("english")}
+              style={{ marginTop: "10px" }}
+            >
+              Show Bible Verses with blank english
+            </Button>
+
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              size={isMobile ? "small" : "medium"}
+              onClick={() => showConditionalVersesHandler("malayalam")}
+              style={{ marginTop: "10px" }}
+            >
+              Show Bible Verses with blank malayalam
             </Button>
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <Button
+            {/* <Button
               variant="contained"
               color="secondary"
               fullWidth
@@ -127,11 +162,11 @@ const Dashboard = ({ type }) => {
               style={{ marginTop: "10px" }}
             >
               Edit Section
-            </Button>
+            </Button> */}
           </Grid>
         </Grid>
       </Container>
-      {showAll && <VersesTable />}
+      {showVerses?.show && <VersesTable type={showVerses?.type} />}
     </>
   );
 };

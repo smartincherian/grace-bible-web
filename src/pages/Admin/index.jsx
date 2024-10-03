@@ -13,6 +13,8 @@ import {
   useAddVerseMutation,
   useCheckIfExistingVerseMutation,
   useGetSectionsMutation,
+  useGetVerseMutation,
+  useUpdateVerseMutation,
 } from "../../store/verses/service";
 import { BIBLE_BOOKS } from "../../utils/constants";
 import {
@@ -22,6 +24,7 @@ import {
 import useErrorToast from "../../hooks/useErrorToast";
 import { AdminSections } from "./addSections";
 import VerseCard from "../../section/Card";
+import { useParams } from "react-router-dom";
 
 const AdminVersesForm = ({ type }) => {
   const { handleSubmit, control, reset, watch } = useForm({
@@ -33,11 +36,14 @@ const AdminVersesForm = ({ type }) => {
       verse: "",
     },
   });
+  const { id } = useParams();
   const { showSnackbar } = useContext(SnackbarContext);
   const showErrorMessage = useErrorToast();
   const [getSections, { isLoading }] = useGetSectionsMutation();
   const [addVerse, { isLoading: isAddingVerse }] = useAddVerseMutation();
   const [addSection, { isLoading: isAddingSection }] = useAddSectionMutation();
+  const [getVerse, { isLoading: isGettingVerse }] = useGetVerseMutation();
+  const [updateVerse, { isLoading: isUpdating }] = useUpdateVerseMutation();
   const [checkUnique, { isLoading: isChecking }] =
     useCheckIfExistingVerseMutation();
   const { sections = [] } = RootState()?.versesData;
@@ -47,7 +53,15 @@ const AdminVersesForm = ({ type }) => {
 
   useEffect(() => {
     getSectionsHandler();
+    if (id) {
+      verseEditHandler();
+    }
   }, []);
+
+  const verseEditHandler = async () => {
+    const res = await getVerse(id);
+    reset(res?.data);
+  };
 
   const getSectionsHandler = async () => {
     try {
@@ -60,20 +74,25 @@ const AdminVersesForm = ({ type }) => {
   const onSubmit = async (data) => {
     try {
       if (type === "admin") {
-        if (!data.english && !data.malayalam) {
-          showErrorMessage(
-            {},
-            "Verse : Either Malayalam or English is required"
-          );
-          return;
+        let response;
+        if (!id) {
+          if (!data.english && !data.malayalam) {
+            showErrorMessage(
+              {},
+              "Verse : Either Malayalam or English is required"
+            );
+            return;
+          }
+          response = await addVerse(data);
+        } else {
+          response = await updateVerse(data);
+          verseEditHandler();
         }
-        const response = await addVerse(data);
         if (response?.data?.success) {
           showSnackbar(
             response?.data?.message,
             SNACK_BAR_SEVERITY_TYPES.SUCCESS
           );
-          reset();
         } else {
           showErrorMessage({}, response?.data?.message);
         }
@@ -104,7 +123,7 @@ const AdminVersesForm = ({ type }) => {
   const verse = watch("verse");
 
   useEffect(() => {
-    if (book && chapter && verse) {
+    if (book && chapter && verse && !id) {
       checkUniqueVerse();
     }
   }, [book, chapter, verse]);
@@ -190,7 +209,7 @@ const AdminVersesForm = ({ type }) => {
           </Grid>
           {type === "admin" ? (
             <>
-              {showNewVerseForm && (
+              {(showNewVerseForm || id) && (
                 <>
                   {/* Malayalam */}
                   <Grid item xs={12}>

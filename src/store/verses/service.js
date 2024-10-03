@@ -2,9 +2,12 @@ import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setSections, setTags, setVerses } from "./slice";
 import {
   fetchAllVerses,
+  fetchConditionVerses,
+  fetchVerse,
   fetchVerses,
   verseAdd,
   verseCheck,
+  verseUpdate,
 } from "../../firebase/verses/verses";
 import {
   fetchSections,
@@ -163,6 +166,45 @@ export const versesApi = createApi({
         }
       },
     }),
+    getVersesWithCondition: builder.mutation({
+      async queryFn(data) {
+        try {
+          const result = await fetchConditionVerses(data);
+          return {
+            data: result,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
+    updateVerse: builder.mutation({
+      async queryFn(data, { dispatch, getState }) {
+        try {
+          const response = await verseUpdate(data);
+          return {
+            data: response,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
+    getVerse: builder.mutation({
+      async queryFn(id, { dispatch, getState }) {
+        try {
+          const result = await fetchVerse(id);
+          return {
+            data: result,
+          };
+        } catch (e) {
+          console.error(e);
+          return { error: e?.message || "Some error occurred" };
+        }
+      },
+    }),
   }),
 });
 
@@ -177,4 +219,7 @@ export const {
   useGetStatsMutation,
   useGetAllVersesMutation,
   useCheckIfExistingVerseMutation,
+  useGetVersesWithConditionMutation,
+  useUpdateVerseMutation,
+  useGetVerseMutation,
 } = versesApi;
