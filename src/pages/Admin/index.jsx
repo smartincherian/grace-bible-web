@@ -23,8 +23,8 @@ import {
 } from "../../components/Snackbar";
 import useErrorToast from "../../hooks/useErrorToast";
 import { AdminSections } from "./addSections";
-import VerseCard from "../../section/Card";
 import { useParams } from "react-router-dom";
+import VerseDialog from "../../section/Card/VerseDialog";
 
 const AdminVersesForm = ({ type }) => {
   const { handleSubmit, control, reset, watch } = useForm({
@@ -290,7 +290,12 @@ const AdminVersesForm = ({ type }) => {
       </form>
       {type === "wallpaper" && showVerseCard && wallpaperData && (
         <Grid mt={5}>
-          <VerseCard verse={wallpaperData} />
+          <VerseDialog
+            verse={wallpaperData}
+            open={showVerseCard}
+            isWallpaper
+            onClose={() => setShowVerseCard(false)}
+          />
         </Grid>
       )}
     </Container>
