@@ -8,6 +8,7 @@ import { ThemeProvider } from "@mui/material";
 import AdminVersesForm from "./pages/Admin";
 import AdminSectionsForm from "./pages/Admin/sections";
 import Dashboard from "./pages/Dashboard";
+import LandingPage from "./pages/Home copy";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/home" element={<LandingPage />} />
             <Route path="/sections/:id" element={<Verses />} />
             <Route path="/admin" element={<AdminVersesForm type="admin" />} />
             <Route path="/admin/section" element={<AdminSectionsForm />} />
